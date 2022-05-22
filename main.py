@@ -3,13 +3,16 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pandas_datareader as web
 import datetime as dt
+from tensorflow import keras
 
 from sklearn.preprocessing import MinMaxScaler
+
 from tensorflow.keras.layers import Dense, LSTM, Dropout
 from tensorflow.keras.models import Sequential
 
-crypto_currency = "ETH"
-against_currency = "USD"
+print("Enter the pair of currency (as ticker) you want to predict: ")
+crypto_currency = input("Enter the ticker of first currency (crypto): ")
+against_currency = input("Enter the ticker of second currency (fiat/crypto) :")
 
 
 start = dt.datetime(2016, 1, 1)
@@ -33,20 +36,23 @@ for x in range(prediction_days, len(scaled_data) - future_day):
 x_train, y_train = np.array(x_train), np.array(y_train)
 x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 
-# Creating NN
+# # Creating NN
 
 model = Sequential()
 
 model.add(LSTM(units=50, return_sequences=True, input_shape=(x_train.shape[1], 1)))
-model.add(Dropout(0.2))
+model.add(Dropout(0.1))
 model.add(LSTM(units=50, return_sequences=True))
-model.add(Dropout(0.2))
+model.add(Dropout(0.1))
 model.add(LSTM(units=50))
-model.add(Dropout(0.2))
+model.add(Dropout(0.1))
 model.add(Dense(units=1))
 
 model.compile(optimizer="adam", loss="mean_squared_error")
 model.fit(x_train, y_train, batch_size=32, epochs=25)
+# filename = "model_weights.h5"
+
+# model = keras.models.load_model(filename)
 
 # Testing the model
 
@@ -84,6 +90,17 @@ plt.ylabel("Price")
 plt.legend(loc="upper left")
 plt.show()
 
+with open(f"./{crypto_currency}-{against_currency} actual_price.txt", "w") as fp:
+    for item in actual_price:
+        # write each item on a new line
+        fp.write("%s\n" % item)
+    print("Done")
+
+with open(f"./{crypto_currency}-{against_currency} prediction_price.txt", "w") as fp:
+    for item in prediction_prices:
+        # write each item on a new line
+        fp.write("%s\n" % item)
+    print("Done")
 
 # Predict next day
 
