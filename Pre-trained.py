@@ -71,7 +71,8 @@ with open(f"./values/{crypto_currency}-{against_currency} actual_price.txt", "w"
     for item in actual_price:
         # write each item on a new line
         fp.write("%s\n" % item)
-    print("Done")
+    print(f"{crypto_currency}-{against_currency} actual_price.txt created")
+
 
 np.reshape(prediction_prices, (prediction_prices.shape[0], 1))
 
@@ -81,7 +82,8 @@ with open(
     for item in prediction_prices:
         # write each item on a new line
         fp.write("%s\n" % item)
-    print("Done")
+    print(f"{crypto_currency}-{against_currency} prediction_price.txt created")
+
 
 # Predict next day
 
