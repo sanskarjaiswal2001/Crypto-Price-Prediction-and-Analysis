@@ -15,7 +15,7 @@ from yaml import load
 from tensorflow.keras.layers import Dense, LSTM, Dropout
 from tensorflow.keras.models import Sequential
 
-print("Enter the pair of currency you want to predict (BTC-INR): ")
+print("Enter the pair of currency you want to predict (e.g BTC-INR): ")
 crypto_currency, against_currency = input().split("-")
 
 start = dt.datetime(2016, 1, 1)
@@ -80,7 +80,7 @@ prediction_prices = scaler.inverse_transform(prediction_prices)
 prediction_prices = prediction_prices.flatten()
 
 # Creating the csv file with Date, Actual Price, Predicted Price
-with open(f"./values/{crypto_currency}-{against_currency}.csv", "w") as f:
+with open(f"./data/{crypto_currency}-{against_currency}.csv", "w") as f:
     w = csv.writer(f)
     w.writerow(["Date", "Actual Price", "Predicted Price"])
     for x, y, z in zip_longest(time_col, actual_price, prediction_prices):
@@ -88,7 +88,7 @@ with open(f"./values/{crypto_currency}-{against_currency}.csv", "w") as f:
 
 # Plot the graph and save it in the destined folder
 plt.plot(actual_price, color="blue", label="Actual Prices")
-plt.plot(prediction_prices, color="green", label="Predicted Prices")
+plt.plot(prediction_prices, color="orange", label="Predicted Prices")
 plt.title(f"{crypto_currency}-{against_currency} price prediction")
 plt.xlabel("Time")
 plt.ylabel("Price")
@@ -104,4 +104,4 @@ real_data = np.reshape(real_data, (real_data.shape[0], real_data.shape[1], 1))
 prediction = model.predict(real_data)
 prediction = scaler.inverse_transform(prediction)
 prediction = prediction.flatten()
-print(prediction[0])
+print(f"predicted price: \n 1 {crypto_currency} ~ {prediction[0]} {against_currency}")
