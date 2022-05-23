@@ -92,6 +92,7 @@ plt.title(f"{crypto_currency}-{against_currency} price prediction")
 plt.xlabel("Time")
 plt.ylabel("Price")
 plt.legend(loc="upper left")
+plt.savefig(f"./graphs/{crypto_currency}-{against_currency}.png")
 plt.show()
 
 prediction_prices = prediction_prices.flatten()

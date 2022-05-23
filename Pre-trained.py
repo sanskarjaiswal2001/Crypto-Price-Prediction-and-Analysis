@@ -33,10 +33,14 @@ model = load_model(f"./models/{crypto_currency}-{against_currency}.h5")
 
 test_start = dt.datetime(2020, 1, 1)
 test_end = dt.datetime.now()
+time_col = pd.date_range(test_start, test_end)
 test_data = web.DataReader(
     f"{crypto_currency}-{against_currency}", "yahoo", test_start, test_end
 )
+
+
 actual_price = test_data["Close"].values
+
 
 total_dataset = pd.concat((data["Close"], test_data["Close"]), axis=0)
 
@@ -63,6 +67,7 @@ plt.title(f"{crypto_currency}-{against_currency} price prediction")
 plt.xlabel("Time")
 plt.ylabel("Price")
 plt.legend(loc="upper left")
+plt.savefig(f"./graphs/{crypto_currency}-{against_currency}.png")
 plt.show()
 
 prediction_prices = prediction_prices.flatten()
@@ -83,6 +88,12 @@ with open(
         # write each item on a new line
         fp.write("%s\n" % item)
     print(f"{crypto_currency}-{against_currency} prediction_price.txt created")
+
+with open(f"./values/{crypto_currency}-{against_currency} time_col.txt", "w") as fp:
+    for item in time_col:
+        # write each item on a new line
+        fp.write("%s\n" % item)
+    print(f"{crypto_currency}-{against_currency} time_col.txt created")
 
 
 # Predict next day
