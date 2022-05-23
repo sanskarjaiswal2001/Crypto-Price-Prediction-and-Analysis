@@ -3,10 +3,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pandas_datareader as web
 import datetime as dt
+import csv
 from tensorflow import keras
 from keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
 from yaml import load
+from itertools import zip_longest
 
 from tensorflow.keras.layers import Dense, LSTM, Dropout
 from tensorflow.keras.models import Sequential
@@ -68,32 +70,17 @@ plt.xlabel("Time")
 plt.ylabel("Price")
 plt.legend(loc="upper left")
 plt.savefig(f"./graphs/{crypto_currency}-{against_currency}.png")
-plt.show()
 
 prediction_prices = prediction_prices.flatten()
-print(prediction_prices.ndim)
-with open(f"./values/{crypto_currency}-{against_currency} actual_price.txt", "w") as fp:
-    for item in actual_price:
-        # write each item on a new line
-        fp.write("%s\n" % item)
-    print(f"{crypto_currency}-{against_currency} actual_price.txt created")
 
 
 np.reshape(prediction_prices, (prediction_prices.shape[0], 1))
 
-with open(
-    f"./values/{crypto_currency}-{against_currency} prediction_price.txt", "w"
-) as fp:
-    for item in prediction_prices:
-        # write each item on a new line
-        fp.write("%s\n" % item)
-    print(f"{crypto_currency}-{against_currency} prediction_price.txt created")
-
-with open(f"./values/{crypto_currency}-{against_currency} time_col.txt", "w") as fp:
-    for item in time_col:
-        # write each item on a new line
-        fp.write("%s\n" % item)
-    print(f"{crypto_currency}-{against_currency} time_col.txt created")
+with open(f"./values/{crypto_currency}-{against_currency}.csv", "w") as f:
+    w = csv.writer(f)
+    w.writerow(["Date", "Actual Price", "Predicted Price"])
+    for x, y, z in zip_longest(time_col, actual_price, prediction_prices):
+        w.writerow([x, y, z])
 
 
 # Predict next day
@@ -108,4 +95,5 @@ real_data = np.reshape(real_data, (real_data.shape[0], real_data.shape[1], 1))
 
 prediction = model.predict(real_data)
 prediction = scaler.inverse_transform(prediction)
-print()
+prediction.flatten()
+print(prediction)
