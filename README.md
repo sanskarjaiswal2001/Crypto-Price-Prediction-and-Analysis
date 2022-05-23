@@ -1,4 +1,4 @@
-# Crypto-Prediction
+# Crypto-Prediction-&-Analysis
 ## Not advised to use this to make financial decisions
 
 ### Predicting next day price
