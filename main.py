@@ -1,19 +1,19 @@
 import os.path
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # gets rid of tensorflow warnings
 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, LSTM, Dropout
-from yaml import load
-from sklearn.preprocessing import MinMaxScaler
-from itertools import zip_longest
-from keras.models import load_model
-from tensorflow import keras
-import csv
-import datetime as dt
-import pandas_datareader as web
-import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import pandas_datareader as web
+import datetime as dt
+import csv
+from tensorflow import keras
+from keras.models import load_model
+from itertools import zip_longest
+from sklearn.preprocessing import MinMaxScaler
+from yaml import load
+from tensorflow.keras.layers import Dense, LSTM, Dropout
+from tensorflow.keras.models import Sequential
 
 
 print("Enter the pair of currency you want to predict (e.g BTC-INR): ")
@@ -29,7 +29,7 @@ scaler = MinMaxScaler(feature_range=(0, 1))
 scaled_data = scaler.fit_transform(data["Close"].values.reshape(-1, 1))
 
 prediction_days = 60
-future_day = 30
+future_day = 1
 
 # Using pre-trained model or train new model
 if os.path.exists(f"./models/{crypto_currency}-{against_currency}.h5"):
