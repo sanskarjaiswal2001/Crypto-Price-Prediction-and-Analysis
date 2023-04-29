@@ -4,7 +4,7 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # gets rid of tensorflow warnings
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import pandas_datareader as web
+import yfinance as yf
 import datetime as dt
 import csv
 from tensorflow import keras
@@ -21,8 +21,7 @@ crypto_currency, against_currency = input().split("-")
 
 start = dt.datetime(2016, 1, 1)
 end = dt.datetime.now()
-data = web.DataReader(
-    f"{crypto_currency}-{against_currency}", "yahoo", start, end)
+data = yf.download(f"{crypto_currency}-{against_currency}", start = start, end = end)
 
 # prepare data
 scaler = MinMaxScaler(feature_range=(0, 1))
@@ -61,9 +60,8 @@ else:
 test_start = dt.datetime(2020, 1, 1)
 test_end = dt.datetime.now()
 time_col = pd.date_range(test_start, test_end)
-test_data = web.DataReader(
-    f"{crypto_currency}-{against_currency}", "yahoo", test_start, test_end
-)
+test_data = yf.download(f"{crypto_currency}-{against_currency}", start = test_start, end = test_end)
+
 actual_price = test_data["Close"].values
 total_dataset = pd.concat((data["Close"], test_data["Close"]), axis=0)
 model_inputs = total_dataset[
